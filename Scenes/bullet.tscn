@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bmlg2r18tl4pq"]
+
+[ext_resource type="Script" uid="uid://coslhkymntf76" path="res://Scripts/bullet.gd" id="1_oduel"]
+[ext_resource type="Texture2D" uid="uid://du5hh2lu3c6n4" path="res://Materials/red_circle.png" id="1_xjght"]
+[ext_resource type="PhysicsMaterial" uid="uid://cxgtb3y8576nt" path="res://Materials/no_friction_and_bounciness.tres" id="1_ycag2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5s483"]
+radius = 16.0
+
+[node name="Bullet" type="RigidBody2D" unique_id=1526661804]
+physics_material_override = ExtResource("1_ycag2")
+script = ExtResource("1_oduel")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=699919884]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_xjght")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1785917643]
+shape = SubResource("CircleShape2D_5s483")

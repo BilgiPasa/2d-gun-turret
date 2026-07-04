@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://f2iijijatit6"]
+
+[ext_resource type="PhysicsMaterial" uid="uid://cxgtb3y8576nt" path="res://Materials/no_friction_and_bounciness.tres" id="1_3mbdm"]
+[ext_resource type="Script" uid="uid://bvp3mlwxxgb86" path="res://Scripts/static_enemy.gd" id="1_b261h"]
+[ext_resource type="Texture2D" uid="uid://bek8l54afntlw" path="res://Materials/black_square.png" id="1_qk16d"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r07tb"]
+size = Vector2(64, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5s483"]
+size = Vector2(70, 70)
+
+[node name="StaticEnemy" type="StaticBody2D" unique_id=1822257023]
+physics_material_override = ExtResource("1_3mbdm")
+script = ExtResource("1_b261h")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=913127278]
+texture = ExtResource("1_qk16d")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1189488955]
+shape = SubResource("RectangleShape2D_r07tb")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=2057079925]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=474794282]
+shape = SubResource("RectangleShape2D_5s483")

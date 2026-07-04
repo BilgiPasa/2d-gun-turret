@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cqugkeeoaxv7n"]
+
+[ext_resource type="Script" uid="uid://c1jaoom8kj2n7" path="res://Scripts/movable_enemy.gd" id="1_3tnxj"]
+[ext_resource type="PhysicsMaterial" uid="uid://cxgtb3y8576nt" path="res://Materials/no_friction_and_bounciness.tres" id="1_oreu4"]
+[ext_resource type="Texture2D" uid="uid://c8n7aggldvqjv" path="res://Materials/black_circle.png" id="1_yc3t7"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5s483"]
+radius = 32.0
+
+[node name="MovableEnemy" type="RigidBody2D" unique_id=517662674]
+physics_material_override = ExtResource("1_oreu4")
+script = ExtResource("1_3tnxj")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2124887464]
+texture = ExtResource("1_yc3t7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=663999881]
+shape = SubResource("CircleShape2D_5s483")
