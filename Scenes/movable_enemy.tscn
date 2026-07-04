@@ -8,6 +8,8 @@
 radius = 32.0
 
 [node name="MovableEnemy" type="RigidBody2D" unique_id=517662674]
+collision_layer = 8
+collision_mask = 4
 physics_material_override = ExtResource("1_oreu4")
 script = ExtResource("1_3tnxj")
 
@@ -16,3 +18,5 @@ texture = ExtResource("1_yc3t7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=663999881]
 shape = SubResource("CircleShape2D_5s483")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
