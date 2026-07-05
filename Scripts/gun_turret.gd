@@ -14,7 +14,7 @@ var targets: Array[Node2D]
 
 # Shoot Bullet Calculation Variables
 const BULLET_DEFAULT_LIN_VEL_X: float = 2000
-const BULLET_MIN_REACH_TIME: float = 0.5
+const BULLET_MIN_REACH_TIME: float = 0.4
 var t: float
 var target_relative_position: Vector2
 var shoot_vector: Vector2
@@ -23,49 +23,48 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 	can_shoot_timer.wait_time = SHOOT_TIMER_WAIT_TIME
 
-func _physics_process(_delta: float) -> void:
-	attack_mouse()
+func _physics_process(delta: float) -> void:
+	attack_mouse(delta)
 
-func attack_closest_target() -> void:
+func attack_closest_target(physics_delta: float) -> void:
 	if target_find_area.has_overlapping_bodies() && can_shoot:
 		can_shoot = false
-		shoot_bullet_to(give_closest_target())
+		shoot_bullet_to(give_closest_target(), physics_delta)
 		can_shoot_timer.start()
 
-func attack_mouse() -> void:
+func attack_mouse(physics_delta: float) -> void:
 	mouse_position_node.global_position = get_global_mouse_position()
 
 	if can_shoot:
 		can_shoot = false
-		shoot_bullet_to(mouse_position_node)
+		shoot_bullet_to(mouse_position_node, physics_delta)
 		can_shoot_timer.start()
 
-func shoot_bullet_to(target: Node2D) -> void:
-	target_relative_position = Vector2(target.global_position.x - gun_sprite.global_position.x, target.global_position.y - gun_sprite.global_position.y)
+func shoot_bullet_to(target: Node2D, physics_delta: float) -> void:
+	var new_bullet = BULLET_SCENE.instantiate() # Make a new bullet
+	target_relative_position = Vector2(target.global_position.x - gun_sprite.global_position.x, target.global_position.y - gun_sprite.global_position.y) # Find the position of the target relative to the gun
+	t = abs(target_relative_position.x) / BULLET_DEFAULT_LIN_VEL_X # Calculate reach time based on default X speed
+
+	if t >= BULLET_MIN_REACH_TIME:
+		# Assign X speed
+		if target_relative_position.x > 0:
+			shoot_vector.x = BULLET_DEFAULT_LIN_VEL_X
+		else:
+			shoot_vector.x = -BULLET_DEFAULT_LIN_VEL_X
+	else: # If reach time is too small
+		t = BULLET_MIN_REACH_TIME # Set the reach time
+		shoot_vector.x = target_relative_position.x / t # Calculate X speed
 
 	if target is MovableEnemy:
-		var new_bullet = BULLET_SCENE.instantiate()
-		# TODO: Finish here
+		pass # TODO: Finish here
 	else:
-		var new_bullet = BULLET_SCENE.instantiate()
-		t = abs(target_relative_position.x) / BULLET_DEFAULT_LIN_VEL_X
+		# At the line below, I used (physics_delta * 4) to hit the target better because if I don't add it, it might miss the target by a small distance.
+		shoot_vector.y = (target_relative_position.y / t) - (gravity_amount * (t + (physics_delta * 4)) / 2) # Calculate Y speed
 
-		if t >= BULLET_MIN_REACH_TIME:
-			if target_relative_position.x > 0:
-				shoot_vector.x = BULLET_DEFAULT_LIN_VEL_X
-			else:
-				shoot_vector.x = -BULLET_DEFAULT_LIN_VEL_X
-
-			shoot_vector.y = (target_relative_position.y / t) - (gravity_amount * (t + 0.05) / 2)
-		else:
-			t = BULLET_MIN_REACH_TIME
-			shoot_vector.x = target_relative_position.x / t
-			shoot_vector.y = (target_relative_position.y / t) - (gravity_amount * (t + 0.05) / 2)
-
-		gun_sprite.look_at(shoot_vector)
-		new_bullet.transform = gun_sprite.global_transform
-		owner.add_child(new_bullet)
-		new_bullet.linear_velocity = shoot_vector
+	gun_sprite.look_at(shoot_vector) # Gun sprite looks at the target
+	new_bullet.position = gun_sprite.global_position # Initialize the position of the bullet
+	owner.add_child(new_bullet) # Add the bullet to the scene
+	new_bullet.linear_velocity = shoot_vector # Add speed to the bullet
 
 func give_closest_target() -> Node2D:
 	var closest_node: Node2D = null
@@ -80,6 +79,7 @@ func give_closest_target() -> Node2D:
 
 	return closest_node
 
+# Calculate how far is the target from the gun
 func how_far(target_global_position: Vector2) -> float:
 	target_relative_position = Vector2(target_global_position.x - gun_sprite.global_position.x, target_global_position.y - gun_sprite.global_position.y)
 	return sqrt(pow(target_relative_position.x, 2) + pow(target_relative_position.y, 2))
