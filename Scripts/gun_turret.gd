@@ -5,20 +5,19 @@ extends StaticBody2D
 @onready var gun_sprite: Sprite2D = $GunSprite
 @onready var can_shoot_timer: Timer = $CanShootTimer
 @onready var target_find_area: Area2D = $TargetFindArea
-@onready var mouse_position_node = $MousePositionNode
+@onready var mouse_position_node: Node2D = $MousePositionNode
 const SHOOT_TIMER_WAIT_TIME: float = 0.2
 const BULLET_SCENE = preload("res://Scenes/bullet.tscn")
 var gravity_amount: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 var can_shoot: bool = true
-var shoot_vector: Vector2
 var targets: Array[Node2D]
 
 # Shoot Bullet Calculation Variables
-const BULLET_DEFAULT_LIN_VEL_X: int = 2000
+const BULLET_DEFAULT_LIN_VEL_X: float = 2000
 const BULLET_MIN_REACH_TIME: float = 0.5
 var t: float
-var bullet_lin_vel_x: float
-var bullet_lin_vel_y: float
+var target_relative_position: Vector2
+var shoot_vector: Vector2
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -42,26 +41,27 @@ func attack_mouse() -> void:
 		can_shoot_timer.start()
 
 func shoot_bullet_to(target: Node2D) -> void:
+	target_relative_position = Vector2(target.global_position.x - gun_sprite.global_position.x, target.global_position.y - gun_sprite.global_position.y)
+
 	if target is MovableEnemy:
 		var new_bullet = BULLET_SCENE.instantiate()
 		# TODO: Finish here
 	else:
 		var new_bullet = BULLET_SCENE.instantiate()
-		t = abs(target.global_position.x - gun_sprite.global_position.x) / BULLET_DEFAULT_LIN_VEL_X
+		t = abs(target_relative_position.x) / BULLET_DEFAULT_LIN_VEL_X
 
 		if t >= BULLET_MIN_REACH_TIME:
-			if target.global_position.x - gun_sprite.global_position.x > 0:
-				bullet_lin_vel_x = BULLET_DEFAULT_LIN_VEL_X
+			if target_relative_position.x > 0:
+				shoot_vector.x = BULLET_DEFAULT_LIN_VEL_X
 			else:
-				bullet_lin_vel_x = -BULLET_DEFAULT_LIN_VEL_X
+				shoot_vector.x = -BULLET_DEFAULT_LIN_VEL_X
 
-			bullet_lin_vel_y = ((target.global_position.y - gun_sprite.global_position.y) - (gravity_amount * pow(t, 2)) / 2) / t
+			shoot_vector.y = (target_relative_position.y / t) - (gravity_amount * (t + 0.05) / 2)
 		else:
 			t = BULLET_MIN_REACH_TIME
-			bullet_lin_vel_x = (target.global_position.x - gun_sprite.global_position.x) / t
-			bullet_lin_vel_y = ((target.global_position.y - gun_sprite.global_position.y) - (gravity_amount * pow(t, 2) / 2)) / t
+			shoot_vector.x = target_relative_position.x / t
+			shoot_vector.y = (target_relative_position.y / t) - (gravity_amount * (t + 0.05) / 2)
 
-		shoot_vector = Vector2(bullet_lin_vel_x, bullet_lin_vel_y)
 		gun_sprite.look_at(shoot_vector)
 		new_bullet.transform = gun_sprite.global_transform
 		owner.add_child(new_bullet)
@@ -81,7 +81,8 @@ func give_closest_target() -> Node2D:
 	return closest_node
 
 func how_far(target_global_position: Vector2) -> float:
-	return sqrt(pow(target_global_position.x - gun_sprite.global_position.x, 2) + pow(target_global_position.y - gun_sprite.global_position.y, 2))
+	target_relative_position = Vector2(target_global_position.x - gun_sprite.global_position.x, target_global_position.y - gun_sprite.global_position.y)
+	return sqrt(pow(target_relative_position.x, 2) + pow(target_relative_position.y, 2))
 
 func _on_can_shoot_timer_timeout() -> void:
 	can_shoot_timer.stop()
