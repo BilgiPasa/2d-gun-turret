@@ -14,6 +14,5 @@ func _physics_process(_delta: float) -> void:
 		queue_free.call_deferred()
 
 func _on_body_entered(body: Node) -> void:
-	if body is not GunTurret:
-		body.queue_free.call_deferred()
-		queue_free.call_deferred()
+	body.queue_free.call_deferred()
+	queue_free.call_deferred()

@@ -7,15 +7,15 @@ extends StaticBody2D
 @onready var can_shoot_timer: Timer = $CanShootTimer
 @onready var target_find_area: Area2D = $TargetFindArea
 @onready var mouse_position_node: Node2D = $MousePositionNode
-const SHOOT_TIMER_WAIT_TIME: float = 0.05
+const SHOOT_TIMER_WAIT_TIME: float = 0.1
 const BULLET_SCENE = preload("res://Scenes/bullet.tscn")
 var gravity_amount: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 var can_shoot: bool = true
 var targets: Array[Node2D]
 
 # Shoot Bullet Calculation Variables
-const BULLET_DEFAULT_LIN_VEL_X: float = 2000
-const BULLET_MIN_REACH_TIME: float = 0.4
+const BULLET_DEFAULT_LIN_VEL_X: float = 2400
+const BULLET_MIN_REACH_TIME: float = 0.25
 var t: float
 var target_relative_position: Vector2
 var shoot_vector: Vector2
@@ -51,40 +51,28 @@ func shoot_bullet_to(target: Node2D, physics_delta: float) -> void:
 
 	if target is MovableEnemy:
 		# Calculate reach time and X speed based on enemy speed and default X speed
-		if target_relative_position.x >= 0:
-			if target.linear_velocity.x >= 0:
+		if target_relative_position.x >= 0: # If the enemy is at the right of the turret
+			if target.linear_velocity.x >= 0: # If the enemy is moving to right
 				t = abs(target_relative_position.x) / (BULLET_DEFAULT_LIN_VEL_X - target.linear_velocity.x)
-
-				if t >= BULLET_MIN_REACH_TIME:
-					shoot_vector.x = BULLET_DEFAULT_LIN_VEL_X
-				else:
-					t = BULLET_MIN_REACH_TIME
-					shoot_vector.x = (target_relative_position.x / t) + target.linear_velocity.x
-			else:
+			else: # If the enemy is moving to left
 				t = abs(target_relative_position.x) / (BULLET_DEFAULT_LIN_VEL_X + target.linear_velocity.x)
 
-				if t >= BULLET_MIN_REACH_TIME:
-					shoot_vector.x = BULLET_DEFAULT_LIN_VEL_X
-				else:
-					t = BULLET_MIN_REACH_TIME
-					shoot_vector.x = (target_relative_position.x / t) + target.linear_velocity.x
-		else:
-			if target.linear_velocity.x >= 0:
-				t = abs(target_relative_position.x) / (BULLET_DEFAULT_LIN_VEL_X - target.linear_velocity.x)
-
-				if t >= BULLET_MIN_REACH_TIME:
-					shoot_vector.x = -BULLET_DEFAULT_LIN_VEL_X
-				else:
-					t = BULLET_MIN_REACH_TIME
-					shoot_vector.x = (target_relative_position.x / t) + target.linear_velocity.x
+			if t >= BULLET_MIN_REACH_TIME:
+				shoot_vector.x = BULLET_DEFAULT_LIN_VEL_X
 			else:
+				t = BULLET_MIN_REACH_TIME
+				shoot_vector.x = (target_relative_position.x / t) + target.linear_velocity.x
+		else: # If the enemy is at the left of the turret
+			if target.linear_velocity.x >= 0: # If the enemy is moving to right
+				t = abs(target_relative_position.x) / (BULLET_DEFAULT_LIN_VEL_X - target.linear_velocity.x)
+			else: # If the enemy is moving to left
 				t = abs(target_relative_position.x) / (BULLET_DEFAULT_LIN_VEL_X + target.linear_velocity.x)
 
-				if t >= BULLET_MIN_REACH_TIME:
-					shoot_vector.x = -BULLET_DEFAULT_LIN_VEL_X
-				else:
-					t = BULLET_MIN_REACH_TIME
-					shoot_vector.x = (target_relative_position.x / t) + target.linear_velocity.x
+			if t >= BULLET_MIN_REACH_TIME:
+				shoot_vector.x = -BULLET_DEFAULT_LIN_VEL_X
+			else:
+				t = BULLET_MIN_REACH_TIME
+				shoot_vector.x = (target_relative_position.x / t) + target.linear_velocity.x
 
 		shoot_vector.y = (target_relative_position.y / t) + target.linear_velocity.y # Calculate Y speed
 	else:
@@ -116,17 +104,25 @@ func give_closest_target() -> Node2D:
 		closest_node = targets[0]
 
 		for i in range(1, len(targets)):
-			if !targets[i].targeted && how_far(closest_node.global_position) > how_far(targets[i].global_position):
+			if !targets[i].targeted && how_far_from_gun_turret_ground(closest_node.global_position) > how_far_from_gun_turret_ground(targets[i].global_position):
 				closest_node = targets[i]
 
 	closest_node.targeted = true
 	return closest_node
 
+# Calculate how far is the target from the gun turret ground
+func how_far_from_gun_turret_ground(target_global_position: Vector2) -> float:
+	return target_global_position.y - global_position.y
+
 # Calculate how far is the target from the gun
-func how_far(target_global_position: Vector2) -> float:
+func how_far_from_gun(target_global_position: Vector2) -> float:
 	target_relative_position = Vector2(target_global_position.x - gun_sprite.global_position.x, target_global_position.y - gun_sprite.global_position.y)
 	return sqrt(pow(target_relative_position.x, 2) + pow(target_relative_position.y, 2))
 
 func _on_can_shoot_timer_timeout() -> void:
 	can_shoot_timer.stop()
 	can_shoot = true
+
+func _on_gt_area_body_entered(body: Node2D) -> void:
+	print("Enemy has hit to the gun turret")
+	body.queue_free.call_deferred()

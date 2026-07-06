@@ -12,6 +12,5 @@ func _ready() -> void:
 	freeze_mode = RigidBody2D.FREEZE_MODE_KINEMATIC
 
 func _on_body_entered(body: Node) -> void:
-	if body is not GunTurret:
-		body.queue_free.call_deferred()
-		queue_free.call_deferred()
+	body.queue_free.call_deferred()
+	queue_free.call_deferred()

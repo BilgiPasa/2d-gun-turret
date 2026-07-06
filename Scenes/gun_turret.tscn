@@ -16,7 +16,7 @@ size = Vector2(200, 200)
 
 [node name="GunTurret" type="StaticBody2D" unique_id=1071740224]
 collision_layer = 2
-collision_mask = 8
+collision_mask = 0
 physics_material_override = ExtResource("1_knhbg")
 script = ExtResource("2_5ca5o")
 
@@ -50,11 +50,12 @@ collision_mask = 8
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TargetFindArea" unique_id=555761708]
 shape = SubResource("CircleShape2D_5s483")
 
-[node name="GunTurretArea" type="Area2D" parent="." unique_id=1173982520]
+[node name="GTArea" type="Area2D" parent="." unique_id=1173982520]
 collision_layer = 2
 collision_mask = 8
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GunTurretArea" unique_id=140194617]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GTArea" unique_id=140194617]
 shape = SubResource("RectangleShape2D_r07tb")
 
 [connection signal="timeout" from="CanShootTimer" to="." method="_on_can_shoot_timer_timeout"]
+[connection signal="body_entered" from="GTArea" to="." method="_on_gt_area_body_entered"]
