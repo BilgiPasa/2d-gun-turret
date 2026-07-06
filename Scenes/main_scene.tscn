@@ -5,41 +5,48 @@
 [ext_resource type="Script" uid="uid://c14rqw4s7qa" path="res://Scripts/movable_enemy_spawner.gd" id="3_x6ack"]
 [ext_resource type="Script" uid="uid://cdqp2fy7aaufi" path="res://Scripts/static_enemy_spawner.gd" id="4_iacmt"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5s483"]
+size = Vector2(4750, 40)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r07tb"]
-size = Vector2(4000, 40)
+size = Vector2(4750, 60)
 
 [node name="MainScene" type="Node2D" unique_id=1697325332]
 script = ExtResource("1_52fb6")
-enable_movable_enemy_spawner = false
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=212988087]
-position = Vector2(0, -1045)
-zoom = Vector2(0.475, 0.475)
+position = Vector2(0, -1260)
+zoom = Vector2(0.4, 0.4)
 
 [node name="GunTurret" parent="." unique_id=1071740224 instance=ExtResource("2_6l7je")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1463870061]
 
-[node name="GroundArea" type="Area2D" parent="." unique_id=31923312]
-position = Vector2(0, 116)
+[node name="Ground" type="StaticBody2D" parent="." unique_id=658723653]
+position = Vector2(0, 126)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground" unique_id=669267698]
+shape = SubResource("RectangleShape2D_5s483")
+
+[node name="GroundArea" type="Area2D" parent="Ground" unique_id=31923312]
 collision_layer = 16
 collision_mask = 8
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GroundArea" unique_id=1202664904]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground/GroundArea" unique_id=1202664904]
 shape = SubResource("RectangleShape2D_r07tb")
 
 [node name="MovableEnemySpawner" type="Node2D" parent="." unique_id=501403955]
-position = Vector2(0, -2500)
+position = Vector2(0, -2750)
 script = ExtResource("3_x6ack")
 
 [node name="SpawnTimer" type="Timer" parent="MovableEnemySpawner" unique_id=924858773]
 
 [node name="StaticEnemySpawner" type="Node2D" parent="." unique_id=1124076927]
-position = Vector2(0, -1250)
+position = Vector2(0, -1500)
 script = ExtResource("4_iacmt")
 
 [node name="SpawnTimer" type="Timer" parent="StaticEnemySpawner" unique_id=344716921]
 
-[connection signal="body_entered" from="GroundArea" to="." method="_on_ground_area_body_entered"]
+[connection signal="body_entered" from="Ground/GroundArea" to="." method="_on_ground_area_body_entered"]
 [connection signal="timeout" from="MovableEnemySpawner/SpawnTimer" to="MovableEnemySpawner" method="_on_spawn_timer_timeout"]
 [connection signal="timeout" from="StaticEnemySpawner/SpawnTimer" to="StaticEnemySpawner" method="_on_spawn_timer_timeout"]

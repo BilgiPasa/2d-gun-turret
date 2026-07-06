@@ -1,6 +1,8 @@
 class_name StaticEnemy
 extends RigidBody2D
 
+var targeted: bool = false
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 	contact_monitor = true
