@@ -3,8 +3,8 @@ extends StaticBody2D
 # * Note: Godot's 2D Y axis increases as you go down and decreases as you go up.
 
 # Shoot Bullet Variables
-const BULLET_DEFAULT_LIN_VEL_X: float = 3000
-const BULLET_MIN_REACH_TIME: float = 0.2
+const BULLET_DEFAULT_LIN_VEL_X: float = 6000
+const BULLET_MIN_REACH_TIME: float = 0.3
 const SHOOT_TIMER_WAIT_TIME: float = 0.1
 const BULLET_SCENE = preload("res://Scenes/bullet.tscn")
 var gravity_amount: float = ProjectSettings.get_setting("physics/2d/default_gravity")

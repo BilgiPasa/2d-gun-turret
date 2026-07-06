@@ -4,13 +4,14 @@ extends Node2D
 @onready var spawn_increaser_timer: Timer = $SpawnIncrTimer
 const SPAWN_X_RANGE: int = 750
 const SPEED_RANGE: int = 500
+const MIN_SPAWN_TIME: float = 0.3
 const MOVABLE_ENEMY_SCENE = preload("res://Scenes/movable_enemy.tscn")
 
 func _ready() -> void:
 	spawn_timer.wait_time = 0.5
 	spawn_timer.autostart = true
 	spawn_timer.start()
-	spawn_increaser_timer.wait_time = 2
+	spawn_increaser_timer.wait_time = 1
 	spawn_increaser_timer.autostart = true
 	spawn_increaser_timer.start()
 
@@ -22,5 +23,5 @@ func _on_spawn_timer_timeout() -> void:
 
 # On Spawn Increaser Timer Timeout
 func _on_spawn_incr_timer_timeout() -> void:
-	if spawn_timer.wait_time > 0.25:
+	if spawn_timer.wait_time > MIN_SPAWN_TIME:
 		spawn_timer.wait_time -= 0.01
