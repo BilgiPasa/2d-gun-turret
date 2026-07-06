@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://ctib38tdrg2iw" path="res://Scenes/gun_turret.tscn" id="2_6l7je"]
 [ext_resource type="Script" uid="uid://c14rqw4s7qa" path="res://Scripts/movable_enemy_spawner.gd" id="3_x6ack"]
 [ext_resource type="Script" uid="uid://cdqp2fy7aaufi" path="res://Scripts/static_enemy_spawner.gd" id="4_iacmt"]
+[ext_resource type="PackedScene" uid="uid://xvfe40rybecl" path="res://Scenes/pause_menu.tscn" id="5_iacmt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5s483"]
 size = Vector2(4750, 40)
@@ -19,8 +20,6 @@ position = Vector2(0, -1260)
 zoom = Vector2(0.4, 0.4)
 
 [node name="GunTurret" parent="." unique_id=1071740224 instance=ExtResource("2_6l7je")]
-
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1463870061]
 
 [node name="Ground" type="StaticBody2D" parent="." unique_id=658723653]
 position = Vector2(0, 126)
@@ -50,6 +49,11 @@ script = ExtResource("4_iacmt")
 [node name="SpawnTimer" type="Timer" parent="StaticEnemySpawner" unique_id=344716921]
 
 [node name="SpawnIncrTimer" type="Timer" parent="StaticEnemySpawner" unique_id=1029786699]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1463870061]
+
+[node name="PauseMenu" parent="CanvasLayer" unique_id=1481798387 instance=ExtResource("5_iacmt")]
+visible = false
 
 [connection signal="body_entered" from="Ground/GroundArea" to="." method="_on_ground_area_body_entered"]
 [connection signal="timeout" from="MovableEnemySpawner/SpawnTimer" to="MovableEnemySpawner" method="_on_spawn_timer_timeout"]

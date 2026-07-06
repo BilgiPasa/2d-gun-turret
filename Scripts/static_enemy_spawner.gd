@@ -3,7 +3,7 @@ extends Node2D
 @onready var spawn_timer: Timer = $SpawnTimer
 @onready var spawn_increaser_timer: Timer = $SpawnIncrTimer
 const SPAWN_RADIUS: int = 750
-const MIN_SPAWN_TIME: float = 0.3
+const MIN_SPAWN_TIME: float = 0.25
 const STATIC_ENEMY_SCENE = preload("res://Scenes/static_enemy.tscn")
 
 func _ready() -> void:

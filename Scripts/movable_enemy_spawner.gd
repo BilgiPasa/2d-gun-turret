@@ -4,7 +4,7 @@ extends Node2D
 @onready var spawn_increaser_timer: Timer = $SpawnIncrTimer
 const SPAWN_X_RANGE: int = 750
 const SPEED_RANGE: int = 500
-const MIN_SPAWN_TIME: float = 0.3
+const MIN_SPAWN_TIME: float = 0.25
 const MOVABLE_ENEMY_SCENE = preload("res://Scenes/movable_enemy.tscn")
 
 func _ready() -> void:
