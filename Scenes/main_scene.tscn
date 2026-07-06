@@ -40,15 +40,11 @@ script = ExtResource("3_x6ack")
 
 [node name="SpawnTimer" type="Timer" parent="MovableEnemySpawner" unique_id=924858773]
 
-[node name="SpawnIncrTimer" type="Timer" parent="MovableEnemySpawner" unique_id=1831318590]
-
 [node name="StaticEnemySpawner" type="Node2D" parent="." unique_id=1124076927]
 position = Vector2(0, -1500)
 script = ExtResource("4_iacmt")
 
 [node name="SpawnTimer" type="Timer" parent="StaticEnemySpawner" unique_id=344716921]
-
-[node name="SpawnIncrTimer" type="Timer" parent="StaticEnemySpawner" unique_id=1029786699]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1463870061]
 
@@ -57,6 +53,4 @@ visible = false
 
 [connection signal="body_entered" from="Ground/GroundArea" to="." method="_on_ground_area_body_entered"]
 [connection signal="timeout" from="MovableEnemySpawner/SpawnTimer" to="MovableEnemySpawner" method="_on_spawn_timer_timeout"]
-[connection signal="timeout" from="MovableEnemySpawner/SpawnIncrTimer" to="MovableEnemySpawner" method="_on_spawn_incr_timer_timeout"]
 [connection signal="timeout" from="StaticEnemySpawner/SpawnTimer" to="StaticEnemySpawner" method="_on_spawn_timer_timeout"]
-[connection signal="timeout" from="StaticEnemySpawner/SpawnIncrTimer" to="StaticEnemySpawner" method="_on_spawn_incr_timer_timeout"]
