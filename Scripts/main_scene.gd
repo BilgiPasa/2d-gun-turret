@@ -10,17 +10,13 @@ func _ready() -> void:
 
 	if enable_movable_enemy_spawner:
 		movable_enemy_spawner.process_mode = Node.PROCESS_MODE_PAUSABLE
-		movable_enemy_spawner.show()
 	else:
 		movable_enemy_spawner.process_mode = Node.PROCESS_MODE_DISABLED
-		movable_enemy_spawner.hide()
 
 	if enable_static_enemy_spawner:
 		static_enemy_spawner.process_mode = Node.PROCESS_MODE_PAUSABLE
-		static_enemy_spawner.show()
 	else:
 		static_enemy_spawner.process_mode = Node.PROCESS_MODE_DISABLED
-		static_enemy_spawner.hide()
 
 func _on_ground_area_body_entered(body: Node2D) -> void:
 	print("Enemy has hit to the ground")

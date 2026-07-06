@@ -7,6 +7,7 @@ func _ready() -> void:
 	contact_monitor = true
 	max_contacts_reported = 1
 	continuous_cd = RigidBody2D.CCD_MODE_CAST_RAY
+	z_index = -1
 	lifespan_timer.wait_time = 5
 	lifespan_timer.start()
 

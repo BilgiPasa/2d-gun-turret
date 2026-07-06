@@ -1,28 +1,37 @@
-class_name GunTurret
 extends StaticBody2D
 
 # * Note: Godot's 2D Y axis increases as you go down and decreases as you go up.
 
+# Shoot Bullet Variables
+const BULLET_DEFAULT_LIN_VEL_X: float = 3000
+const BULLET_MIN_REACH_TIME: float = 0.2
+const SHOOT_TIMER_WAIT_TIME: float = 0.1
+const BULLET_SCENE = preload("res://Scenes/bullet.tscn")
+var gravity_amount: float = ProjectSettings.get_setting("physics/2d/default_gravity")
+var t: float
+var can_shoot: bool = true
+var target_relative_position: Vector2
+var shoot_vector: Vector2
+var targets: Array[Node2D]
+
+# Gun Turret Label Variable
+var show_label: bool = true
+
+# @onready Variables
 @onready var gun_sprite: Sprite2D = $GunSprite
 @onready var can_shoot_timer: Timer = $CanShootTimer
 @onready var target_find_area: Area2D = $TargetFindArea
 @onready var mouse_position_node: Node2D = $MousePositionNode
-const SHOOT_TIMER_WAIT_TIME: float = 0.1
-const BULLET_SCENE = preload("res://Scenes/bullet.tscn")
-var gravity_amount: float = ProjectSettings.get_setting("physics/2d/default_gravity")
-var can_shoot: bool = true
-var targets: Array[Node2D]
-
-# Shoot Bullet Calculation Variables
-const BULLET_DEFAULT_LIN_VEL_X: float = 2400
-const BULLET_MIN_REACH_TIME: float = 0.25
-var t: float
-var target_relative_position: Vector2
-var shoot_vector: Vector2
+@onready var gun_turret_label: Label = $GunTurretLabel
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 	can_shoot_timer.wait_time = SHOOT_TIMER_WAIT_TIME
+
+	if show_label:
+		gun_turret_label.show()
+	else:
+		gun_turret_label.hide()
 
 func _physics_process(delta: float) -> void:
 	attack_closest_target(delta)
@@ -104,8 +113,15 @@ func give_closest_target() -> Node2D:
 		closest_node = targets[0]
 
 		for i in range(1, len(targets)):
-			if !targets[i].targeted && how_far_from_gun_turret_ground(closest_node.global_position) > how_far_from_gun_turret_ground(targets[i].global_position):
+			# Use this for "how_far_from_gun_turret_ground"
+			if !targets[i].targeted && how_far_from_gun_turret_ground(closest_node.global_position) < how_far_from_gun_turret_ground(targets[i].global_position):
 				closest_node = targets[i]
+
+			# Use this for "how_far_from_gun"
+			#if !targets[i].targeted && how_far_from_gun(closest_node.global_position) > how_far_from_gun(targets[i].global_position):
+			#	closest_node = targets[i]
+
+			# Never use both of the above at the same time. Just use one of them.
 
 	closest_node.targeted = true
 	return closest_node
