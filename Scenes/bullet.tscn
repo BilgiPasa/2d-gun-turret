@@ -21,7 +21,5 @@ texture = ExtResource("1_xjght")
 shape = SubResource("CircleShape2D_5s483")
 
 [node name="LifespanTimer" type="Timer" parent="." unique_id=433555150]
-wait_time = 3.0
-autostart = true
 
 [connection signal="timeout" from="LifespanTimer" to="." method="_on_lifespan_timer_timeout"]

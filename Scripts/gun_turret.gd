@@ -1,3 +1,4 @@
+class_name GunTurret
 extends StaticBody2D
 
 # * Note: Godot's 2D Y axis increases as you go down and decreases as you go up.
@@ -6,7 +7,7 @@ extends StaticBody2D
 @onready var can_shoot_timer: Timer = $CanShootTimer
 @onready var target_find_area: Area2D = $TargetFindArea
 @onready var mouse_position_node: Node2D = $MousePositionNode
-const SHOOT_TIMER_WAIT_TIME: float = 0.2
+const SHOOT_TIMER_WAIT_TIME: float = 0.1
 const BULLET_SCENE = preload("res://Scenes/bullet.tscn")
 var gravity_amount: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 var can_shoot: bool = true
@@ -24,7 +25,7 @@ func _ready() -> void:
 	can_shoot_timer.wait_time = SHOOT_TIMER_WAIT_TIME
 
 func _physics_process(delta: float) -> void:
-	attack_mouse(delta)
+	attack_closest_target(delta)
 
 func attack_closest_target(physics_delta: float) -> void:
 	if target_find_area.has_overlapping_bodies() && can_shoot:
@@ -32,7 +33,8 @@ func attack_closest_target(physics_delta: float) -> void:
 		shoot_bullet_to(give_closest_target(), physics_delta)
 		can_shoot_timer.start()
 
-func attack_mouse(physics_delta: float) -> void:
+# For testing
+func attack_mouse_position(physics_delta: float) -> void:
 	mouse_position_node.global_position = get_global_mouse_position()
 
 	if can_shoot:
@@ -43,21 +45,58 @@ func attack_mouse(physics_delta: float) -> void:
 func shoot_bullet_to(target: Node2D, physics_delta: float) -> void:
 	var new_bullet = BULLET_SCENE.instantiate() # Make a new bullet
 	target_relative_position = Vector2(target.global_position.x - gun_sprite.global_position.x, target.global_position.y - gun_sprite.global_position.y) # Find the position of the target relative to the gun
-	t = abs(target_relative_position.x) / BULLET_DEFAULT_LIN_VEL_X # Calculate reach time based on default X speed
-
-	if t >= BULLET_MIN_REACH_TIME:
-		# Assign X speed
-		if target_relative_position.x > 0:
-			shoot_vector.x = BULLET_DEFAULT_LIN_VEL_X
-		else:
-			shoot_vector.x = -BULLET_DEFAULT_LIN_VEL_X
-	else: # If reach time is too small
-		t = BULLET_MIN_REACH_TIME # Set the reach time
-		shoot_vector.x = target_relative_position.x / t # Calculate X speed
 
 	if target is MovableEnemy:
-		pass # TODO: Finish here
+		# Calculate reach time and X speed based on enemy speed and default X speed
+		if target_relative_position.x >= 0:
+			if target.linear_velocity.x >= 0:
+				t = abs(target_relative_position.x) / (BULLET_DEFAULT_LIN_VEL_X - target.linear_velocity.x)
+
+				if t >= BULLET_MIN_REACH_TIME:
+					shoot_vector.x = BULLET_DEFAULT_LIN_VEL_X
+				else:
+					t = BULLET_MIN_REACH_TIME
+					shoot_vector.x = (target_relative_position.x / t) + target.linear_velocity.x
+			else:
+				t = abs(target_relative_position.x) / (BULLET_DEFAULT_LIN_VEL_X + target.linear_velocity.x)
+
+				if t >= BULLET_MIN_REACH_TIME:
+					shoot_vector.x = BULLET_DEFAULT_LIN_VEL_X
+				else:
+					t = BULLET_MIN_REACH_TIME
+					shoot_vector.x = (target_relative_position.x / t) - target.linear_velocity.x
+		else:
+			if target.linear_velocity.x >= 0:
+				t = abs(target_relative_position.x) / (BULLET_DEFAULT_LIN_VEL_X + target.linear_velocity.x)
+
+				if t >= BULLET_MIN_REACH_TIME:
+					shoot_vector.x = -BULLET_DEFAULT_LIN_VEL_X
+				else:
+					t = BULLET_MIN_REACH_TIME
+					shoot_vector.x = (target_relative_position.x / t) + target.linear_velocity.x
+			else:
+				t = abs(target_relative_position.x) / (BULLET_DEFAULT_LIN_VEL_X - target.linear_velocity.x)
+
+				if t >= BULLET_MIN_REACH_TIME:
+					shoot_vector.x = -BULLET_DEFAULT_LIN_VEL_X
+				else:
+					t = BULLET_MIN_REACH_TIME
+					shoot_vector.x = (target_relative_position.x / t) - target.linear_velocity.x
+
+		shoot_vector.y = (target_relative_position.y / t) - (gravity_amount * t / 2) + target.linear_velocity.y # Calculate Y speed
 	else:
+		t = abs(target_relative_position.x) / BULLET_DEFAULT_LIN_VEL_X # Calculate reach time based on default X speed
+
+		if t >= BULLET_MIN_REACH_TIME:
+			# Assign X speed
+			if target_relative_position.x >= 0:
+				shoot_vector.x = BULLET_DEFAULT_LIN_VEL_X
+			else:
+				shoot_vector.x = -BULLET_DEFAULT_LIN_VEL_X
+		else: # If reach time is too small
+			t = BULLET_MIN_REACH_TIME # Set the reach time
+			shoot_vector.x = target_relative_position.x / t # Calculate X speed
+
 		# At the line below, I used (physics_delta * 4) to hit the target better because if I don't add it, it might miss the target by a small distance.
 		shoot_vector.y = (target_relative_position.y / t) - (gravity_amount * (t + (physics_delta * 4)) / 2) # Calculate Y speed
 
