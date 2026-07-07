@@ -1,3 +1,4 @@
+class_name GunTurret
 extends StaticBody2D
 
 # * Note: Godot's 2D Y axis increases as you go down and decreases as you go up.

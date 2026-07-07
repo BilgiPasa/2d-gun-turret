@@ -1,6 +1,7 @@
 extends Node2D
 
 @onready var movable_enemy_spawner: Node2D = $MovableEnemySpawner
+@onready var gun_turret: GunTurret = $GunTurret
 @onready var static_enemy_spawner: Node2D = $StaticEnemySpawner
 @onready var pause_menu: Control = $CanvasLayer/PauseMenu
 @onready var settings_menu: Control = $CanvasLayer/SettingsMenu
@@ -52,15 +53,29 @@ func _on_pause_menu_open_settings() -> void:
 
 func _on_settings_menu_turn_on_mes() -> void:
 	movable_enemy_spawner.process_mode = Node.PROCESS_MODE_PAUSABLE
+	print("Movable enemy spawning enabled.")
 
 func _on_settings_menu_turn_off_mes() -> void:
 	movable_enemy_spawner.process_mode = Node.PROCESS_MODE_DISABLED
+	print("Movable enemy spawning disabled.")
+
+func _on_settings_menu_turn_on_gt() -> void:
+	gun_turret.process_mode = Node.PROCESS_MODE_PAUSABLE
+	gun_turret.show()
+	print("Gun turret enabled.")
+
+func _on_settings_menu_turn_off_gt() -> void:
+	gun_turret.process_mode = Node.PROCESS_MODE_DISABLED
+	gun_turret.hide()
+	print("Gun turret disabled.")
 
 func _on_settings_menu_turn_on_ses() -> void:
 	static_enemy_spawner.process_mode = Node.PROCESS_MODE_PAUSABLE
+	print("Static enemy spawning enabled.")
 
 func _on_settings_menu_turn_off_ses() -> void:
 	static_enemy_spawner.process_mode = Node.PROCESS_MODE_DISABLED
+	print("Static enemy spawning disabled.")
 
 func _on_settings_menu_go_back() -> void:
 	close_settings()

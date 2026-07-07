@@ -30,21 +30,44 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -509.0
+offset_left = -659.0
 offset_top = -73.0
-offset_right = -90.99951
+offset_right = -240.99951
 offset_bottom = 73.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_neighbor_left = NodePath(".")
 focus_neighbor_top = NodePath(".")
-focus_neighbor_right = NodePath("../SESOnOffButton")
+focus_neighbor_right = NodePath("../GTOnOffButton")
 focus_neighbor_bottom = NodePath("../GoBackButton")
-focus_next = NodePath("../SESOnOffButton")
+focus_next = NodePath("../GTOnOffButton")
 focus_previous = NodePath("../GoBackButton")
 theme_override_font_sizes/font_size = 50
 text = "Disable Movable
 Enemy Spawning"
+
+[node name="GTOnOffButton" type="Button" parent="Panel" unique_id=1531883016]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -136.5
+offset_top = -73.0
+offset_right = 136.5
+offset_bottom = 73.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_neighbor_left = NodePath("../MESOnOffButton")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath("../SESOnOffButton")
+focus_neighbor_bottom = NodePath("../GoBackButton")
+focus_next = NodePath("../SESOnOffButton")
+focus_previous = NodePath("../MESOnOffButton")
+theme_override_font_sizes/font_size = 50
+text = "Disable
+Gun Turret"
 
 [node name="SESOnOffButton" type="Button" parent="Panel" unique_id=910059479]
 layout_mode = 1
@@ -53,18 +76,18 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 91.0
+offset_left = 241.0
 offset_top = -73.0
-offset_right = 509.0005
+offset_right = 659.0005
 offset_bottom = 73.00012
 grow_horizontal = 2
 grow_vertical = 2
-focus_neighbor_left = NodePath("../MESOnOffButton")
+focus_neighbor_left = NodePath("../GTOnOffButton")
 focus_neighbor_top = NodePath(".")
 focus_neighbor_right = NodePath("../GoBackButton")
 focus_neighbor_bottom = NodePath("../GoBackButton")
 focus_next = NodePath("../GoBackButton")
-focus_previous = NodePath("../MESOnOffButton")
+focus_previous = NodePath("../GTOnOffButton")
 theme_override_font_sizes/font_size = 50
 text = "Disable Static
 Enemy Spawning"
@@ -109,5 +132,6 @@ text = "Settings"
 
 [connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
 [connection signal="pressed" from="Panel/MESOnOffButton" to="." method="_on_mes_on_off_button_pressed"]
+[connection signal="pressed" from="Panel/GTOnOffButton" to="." method="_on_gt_on_off_button_pressed"]
 [connection signal="pressed" from="Panel/SESOnOffButton" to="." method="_on_ses_on_off_button_pressed"]
 [connection signal="pressed" from="Panel/GoBackButton" to="." method="_on_go_back_button_pressed"]
