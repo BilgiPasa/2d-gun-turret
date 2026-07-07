@@ -19,4 +19,7 @@ texture = ExtResource("1_qk16d")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1189488955]
 shape = SubResource("RectangleShape2D_r07tb")
 
+[node name="RetargetTimer" type="Timer" parent="." unique_id=453413700]
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="RetargetTimer" to="." method="_on_retarget_timer_timeout"]

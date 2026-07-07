@@ -124,6 +124,7 @@ func give_closest_target() -> Node2D:
 			# Never use both of the above at the same time. Just use one of them.
 
 	closest_node.targeted = true
+	closest_node.retarget_timer.start()
 	return closest_node
 
 # Calculate how far is the target from the gun turret ground
