@@ -6,6 +6,7 @@ const SPAWN_TIME: float = 0.25
 const STATIC_ENEMY_SCENE = preload("res://Scenes/static_enemy.tscn")
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_PAUSABLE
 	spawn_timer.wait_time = SPAWN_TIME
 	spawn_timer.autostart = true
 	spawn_timer.start()

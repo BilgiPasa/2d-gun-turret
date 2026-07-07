@@ -1,6 +1,7 @@
 extends Control
 
-signal resume # Resume signal for the main scene
+signal resume
+signal open_settings
 
 @onready var resume_button: Button = $Panel/ResumeButton
 
@@ -12,7 +13,7 @@ func _on_resume_button_pressed() -> void:
 	resume.emit()
 
 func _on_settings_button_pressed() -> void:
-	pass # Replace with function body.
+	open_settings.emit()
 
 func _on_quit_button_pressed() -> void:
 	get_tree().quit()

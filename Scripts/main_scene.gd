@@ -3,30 +3,24 @@ extends Node2D
 @onready var movable_enemy_spawner: Node2D = $MovableEnemySpawner
 @onready var static_enemy_spawner: Node2D = $StaticEnemySpawner
 @onready var pause_menu: Control = $CanvasLayer/PauseMenu
-var enable_static_enemy_spawner: bool = true
-var enable_movable_enemy_spawner: bool = true
+@onready var settings_menu: Control = $CanvasLayer/SettingsMenu
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	pause_menu.process_mode = Node.PROCESS_MODE_DISABLED
 	pause_menu.hide()
-
-	if enable_movable_enemy_spawner:
-		movable_enemy_spawner.process_mode = Node.PROCESS_MODE_PAUSABLE
-	else:
-		movable_enemy_spawner.process_mode = Node.PROCESS_MODE_DISABLED
-
-	if enable_static_enemy_spawner:
-		static_enemy_spawner.process_mode = Node.PROCESS_MODE_PAUSABLE
-	else:
-		static_enemy_spawner.process_mode = Node.PROCESS_MODE_DISABLED
+	settings_menu.process_mode = Node.PROCESS_MODE_DISABLED
+	settings_menu.hide()
 
 func _input(event) -> void:
 	if event.is_action_pressed("ui_cancel"): # If "esc" key pressed
 		if !get_tree().paused:
 			pause()
 		else:
-			resume()
+			if !settings_menu.visible:
+				resume()
+			else:
+				close_settings()
 
 func pause() -> void:
 	get_tree().paused = true
@@ -38,9 +32,35 @@ func resume() -> void:
 	pause_menu.process_mode = Node.PROCESS_MODE_DISABLED
 	pause_menu.hide()
 
+func open_settings() -> void:
+	settings_menu.process_mode = Node.PROCESS_MODE_INHERIT
+	settings_menu.show()
+
+func close_settings() -> void:
+	settings_menu.process_mode = Node.PROCESS_MODE_DISABLED
+	settings_menu.hide()
+
 func _on_ground_area_body_entered(body: Node2D) -> void:
 	print("Enemy has hit to the ground")
 	body.queue_free.call_deferred()
 
 func _on_pause_menu_resume() -> void:
 	resume()
+
+func _on_pause_menu_open_settings() -> void:
+	open_settings()
+
+func _on_settings_menu_turn_on_mes() -> void:
+	movable_enemy_spawner.process_mode = Node.PROCESS_MODE_PAUSABLE
+
+func _on_settings_menu_turn_off_mes() -> void:
+	movable_enemy_spawner.process_mode = Node.PROCESS_MODE_DISABLED
+
+func _on_settings_menu_turn_on_ses() -> void:
+	static_enemy_spawner.process_mode = Node.PROCESS_MODE_PAUSABLE
+
+func _on_settings_menu_turn_off_ses() -> void:
+	static_enemy_spawner.process_mode = Node.PROCESS_MODE_DISABLED
+
+func _on_settings_menu_go_back() -> void:
+	close_settings()
