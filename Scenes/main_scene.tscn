@@ -54,3 +54,4 @@ visible = false
 [connection signal="body_entered" from="Ground/GroundArea" to="." method="_on_ground_area_body_entered"]
 [connection signal="timeout" from="MovableEnemySpawner/SpawnTimer" to="MovableEnemySpawner" method="_on_spawn_timer_timeout"]
 [connection signal="timeout" from="StaticEnemySpawner/SpawnTimer" to="StaticEnemySpawner" method="_on_spawn_timer_timeout"]
+[connection signal="resume" from="CanvasLayer/PauseMenu" to="." method="_on_pause_menu_resume"]

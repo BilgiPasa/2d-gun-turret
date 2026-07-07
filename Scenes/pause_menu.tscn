@@ -11,7 +11,15 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_emv3i")
 
-[node name="PauseLabel" type="Label" parent="." unique_id=1335443289]
+[node name="Panel" type="Panel" parent="." unique_id=1135780193]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PauseLabel" type="Label" parent="Panel" unique_id=1335443289]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -27,7 +35,7 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 120
 text = "Paused"
 
-[node name="ResumeButton" type="Button" parent="." unique_id=263151304]
+[node name="ResumeButton" type="Button" parent="Panel" unique_id=263151304]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -40,10 +48,16 @@ offset_right = 178.0
 offset_bottom = -57.999573
 grow_horizontal = 2
 grow_vertical = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../SettingsButton")
+focus_next = NodePath("../SettingsButton")
+focus_previous = NodePath(".")
 theme_override_font_sizes/font_size = 90
 text = "Resume"
 
-[node name="SettingsButton" type="Button" parent="." unique_id=469387869]
+[node name="SettingsButton" type="Button" parent="Panel" unique_id=469387869]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -56,10 +70,16 @@ offset_right = 178.0
 offset_bottom = 142.0003
 grow_horizontal = 2
 grow_vertical = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../ResumeButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../QuitButton")
+focus_next = NodePath("../QuitButton")
+focus_previous = NodePath("../ResumeButton")
 theme_override_font_sizes/font_size = 90
 text = "Settings"
 
-[node name="QuitButton" type="Button" parent="." unique_id=1132781728]
+[node name="QuitButton" type="Button" parent="Panel" unique_id=1132781728]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -72,9 +92,16 @@ offset_right = 88.0
 offset_bottom = 328.00012
 grow_horizontal = 2
 grow_vertical = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../SettingsButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath(".")
+focus_next = NodePath(".")
+focus_previous = NodePath("../SettingsButton")
 theme_override_font_sizes/font_size = 80
 text = "Quit"
 
-[connection signal="pressed" from="ResumeButton" to="." method="_on_resume_button_pressed"]
-[connection signal="pressed" from="SettingsButton" to="." method="_on_settings_button_pressed"]
-[connection signal="pressed" from="QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
+[connection signal="pressed" from="Panel/ResumeButton" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="Panel/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="Panel/QuitButton" to="." method="_on_quit_button_pressed"]
