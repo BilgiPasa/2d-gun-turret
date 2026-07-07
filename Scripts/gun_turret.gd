@@ -6,7 +6,7 @@ extends StaticBody2D
 # Shoot Bullet Variables
 const BULLET_DEFAULT_LIN_VEL_X: float = 9000
 const BULLET_MIN_REACH_TIME: float = 0.15
-const SHOOT_TIMER_WAIT_TIME: float = 0.075
+const SHOOT_TIMER_WAIT_TIME: float = 0.05
 const BULLET_SCENE = preload("res://Scenes/bullet.tscn")
 var gravity_amount: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 var t: float
