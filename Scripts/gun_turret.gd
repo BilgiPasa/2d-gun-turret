@@ -13,6 +13,7 @@ var t: float
 var can_shoot: bool = true
 var target_relative_position: Vector2
 var shoot_vector: Vector2
+var closest_target: Node2D
 var targets: Array[Node2D]
 
 # Gun Turret Label Variable
@@ -107,26 +108,26 @@ func shoot_bullet_to(target: Node2D, physics_delta: float) -> void:
 	new_bullet.linear_velocity = shoot_vector # Add speed to the bullet
 
 func give_closest_target() -> Node2D:
-	var closest_node: Node2D = null
+	closest_target = null
 	targets = target_find_area.get_overlapping_bodies()
 
 	if len(targets) > 0:
-		closest_node = targets[0]
+		closest_target = targets[0]
 
 		for i in range(1, len(targets)):
 			# Use this for "how_far_from_gun_turret_ground"
-			if !targets[i].targeted && how_far_from_gun_turret_ground(closest_node.global_position) < how_far_from_gun_turret_ground(targets[i].global_position):
-				closest_node = targets[i]
+			if !targets[i].targeted && how_far_from_gun_turret_ground(closest_target.global_position) < how_far_from_gun_turret_ground(targets[i].global_position):
+				closest_target = targets[i]
 
 			# Use this for "how_far_from_gun"
-			#if !targets[i].targeted && how_far_from_gun(closest_node.global_position) > how_far_from_gun(targets[i].global_position):
-			#	closest_node = targets[i]
+			#if !targets[i].targeted && how_far_from_gun(closest_target.global_position) > how_far_from_gun(targets[i].global_position):
+			#	closest_target = targets[i]
 
 			# Never use both of the above at the same time. Just use one of them.
 
-	closest_node.targeted = true
-	closest_node.retarget_timer.start()
-	return closest_node
+	closest_target.targeted = true
+	closest_target.retarget_timer.start()
+	return closest_target
 
 # Calculate how far is the target from the gun turret ground
 func how_far_from_gun_turret_ground(target_global_position: Vector2) -> float:
