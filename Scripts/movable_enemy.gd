@@ -6,9 +6,9 @@ var targeted: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
+	continuous_cd = RigidBody2D.CCD_MODE_CAST_RAY
 	contact_monitor = true
 	max_contacts_reported = 1
-	continuous_cd = RigidBody2D.CCD_MODE_CAST_RAY
 	retarget_timer.wait_time = 0.5
 
 func _physics_process(_delta: float) -> void:
