@@ -4,12 +4,10 @@ extends StaticBody2D
 # * Note: Godot's 2D Y axis increases as you go down and decreases as you go up.
 
 # Shoot Bullet Variables
-const BULLET_DEFAULT_LIN_VEL_X: float = 9000
-const BULLET_MIN_REACH_TIME: float = 0.15
+const BULLET_REACH_TIME: float = 0.15
 const SHOOT_TIMER_WAIT_TIME: float = 0.05
 const BULLET_SCENE = preload("res://Scenes/bullet.tscn")
 var gravity_amount: float = ProjectSettings.get_setting("physics/2d/default_gravity")
-var t: float
 var can_shoot: bool = true
 var target_relative_position: Vector2
 var shoot_vector: Vector2
@@ -57,68 +55,45 @@ func shoot_bullet_to(target: Node2D, physics_delta: float) -> void:
 	if target == null:
 		return
 
-	var new_bullet = BULLET_SCENE.instantiate() # Make a new bullet
-	target_relative_position = Vector2(target.global_position.x - gun_sprite.global_position.x, target.global_position.y - gun_sprite.global_position.y) # Find the position of the target relative to the gun
+	# Make a new bullet
+	var new_bullet = BULLET_SCENE.instantiate()
+
+	# Find the position of the target relative to the gun
+	target_relative_position = Vector2(target.global_position.x - gun_sprite.global_position.x, target.global_position.y - gun_sprite.global_position.y)
 
 	if target is MovableEnemy:
-		# Calculate reach time and X speed based on enemy speed and default X speed
-		if target_relative_position.x >= 0: # If the enemy is at the right of the turret
-			if target.linear_velocity.x >= 0: # If the enemy is moving to right
-				t = abs(target_relative_position.x) / (BULLET_DEFAULT_LIN_VEL_X - target.linear_velocity.x)
-			else: # If the enemy is moving to left
-				t = abs(target_relative_position.x) / (BULLET_DEFAULT_LIN_VEL_X + target.linear_velocity.x)
+		# Calculate X speed
+		shoot_vector.x = (target_relative_position.x / BULLET_REACH_TIME) + target.linear_velocity.x
 
-			if t >= BULLET_MIN_REACH_TIME:
-				shoot_vector.x = BULLET_DEFAULT_LIN_VEL_X
-			else:
-				t = BULLET_MIN_REACH_TIME
-				shoot_vector.x = (target_relative_position.x / t) + target.linear_velocity.x
-		else: # If the enemy is at the left of the turret
-			if target.linear_velocity.x >= 0: # If the enemy is moving to right
-				t = abs(target_relative_position.x) / (BULLET_DEFAULT_LIN_VEL_X - target.linear_velocity.x)
-			else: # If the enemy is moving to left
-				t = abs(target_relative_position.x) / (BULLET_DEFAULT_LIN_VEL_X + target.linear_velocity.x)
-
-			if t >= BULLET_MIN_REACH_TIME:
-				shoot_vector.x = -BULLET_DEFAULT_LIN_VEL_X
-			else:
-				t = BULLET_MIN_REACH_TIME
-				shoot_vector.x = (target_relative_position.x / t) + target.linear_velocity.x
-
+		# Calculate Y speed
 		# There is no gravity calculation here because the bullet and the movable enemy have the same gravity
-		shoot_vector.y = (target_relative_position.y / t) + target.linear_velocity.y # Calculate Y speed
+		shoot_vector.y = (target_relative_position.y / BULLET_REACH_TIME) + target.linear_velocity.y
 	else:
-		t = abs(target_relative_position.x) / BULLET_DEFAULT_LIN_VEL_X # Calculate reach time based on default X speed
+		# Calculate X speed
+		shoot_vector.x = target_relative_position.x / BULLET_REACH_TIME
 
-		if t >= BULLET_MIN_REACH_TIME:
-			# Assign X speed
-			if target_relative_position.x >= 0:
-				shoot_vector.x = BULLET_DEFAULT_LIN_VEL_X
-			else:
-				shoot_vector.x = -BULLET_DEFAULT_LIN_VEL_X
-		else: # If reach time is too small
-			t = BULLET_MIN_REACH_TIME # Set the reach time
-			shoot_vector.x = target_relative_position.x / t # Calculate X speed
-
+		# Calculate Y speed
 		# At the line below, I used (physics_delta * 4) to hit the target better because if I don't add it, it might miss the target by a small distance.
-		shoot_vector.y = (target_relative_position.y / t) - (gravity_amount * (t + (physics_delta * 4)) / 2) # Calculate Y speed
+		shoot_vector.y = (target_relative_position.y / BULLET_REACH_TIME) - (gravity_amount * (BULLET_REACH_TIME + (physics_delta * 4)) / 2)
 
-	gun_sprite.look_at(shoot_vector) # Gun sprite looks at the target
+	gun_sprite.look_at(shoot_vector) # Make the gun sprite look at the target
 	new_bullet.position = gun_sprite.global_position # Initialize the position of the bullet
 	owner.add_child(new_bullet) # Add the bullet to the scene
 	new_bullet.linear_velocity = shoot_vector # Add speed to the bullet
 
 func give_closest_target() -> Node2D:
 	closest_target = null
-	targets = target_find_area.get_overlapping_bodies()
+	targets = target_find_area.get_overlapping_bodies() # Get the enemies inside of the target find area
 
-	if len(targets) > 0:
-		closest_target = targets[0]
+	if len(targets) > 0: # If there are enemies inside of the target find area
+		closest_target = targets[0] # Starting from the first node
 
+		# Compare all of the nodes
 		for i in range(1, len(targets)):
 			if !targets[i].targeted && how_far_from_gun_turret_ground(closest_target.global_position) > how_far_from_gun_turret_ground(targets[i].global_position):
 				closest_target = targets[i]
 
+	# Make the closest target as "targeted" and return the closest target
 	closest_target.targeted = true
 	closest_target.retarget_timer.start()
 	return closest_target
