@@ -115,15 +115,8 @@ func give_closest_target() -> Node2D:
 		closest_target = targets[0]
 
 		for i in range(1, len(targets)):
-			# Use this for "how_far_from_gun_turret_ground"
 			if !targets[i].targeted && how_far_from_gun_turret_ground(closest_target.global_position) > how_far_from_gun_turret_ground(targets[i].global_position):
 				closest_target = targets[i]
-
-			# Use this for "how_far_from_gun"
-			#if !targets[i].targeted && how_far_from_gun(closest_target.global_position) > how_far_from_gun(targets[i].global_position):
-			#	closest_target = targets[i]
-
-			# Never use both of the above at the same time. Just use one of them.
 
 	closest_target.targeted = true
 	closest_target.retarget_timer.start()
@@ -132,11 +125,6 @@ func give_closest_target() -> Node2D:
 # Calculate how far is the target from the gun turret ground
 func how_far_from_gun_turret_ground(target_global_position: Vector2) -> float:
 	return abs(target_global_position.y - global_position.y)
-
-# Calculate how far is the target from the gun
-func how_far_from_gun(target_global_position: Vector2) -> float:
-	target_relative_position = Vector2(target_global_position.x - gun_sprite.global_position.x, target_global_position.y - gun_sprite.global_position.y)
-	return sqrt(pow(target_relative_position.x, 2) + pow(target_relative_position.y, 2))
 
 func _on_can_shoot_timer_timeout() -> void:
 	can_shoot_timer.stop()
