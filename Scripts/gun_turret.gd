@@ -79,7 +79,7 @@ func shoot_bullet_to(target: Node2D, physics_delta: float) -> void:
 	gun_sprite.look_at(shoot_vector) # Make the gun sprite look at the target
 	new_bullet.position = gun_sprite.global_position # Initialize the position of the bullet
 	owner.add_child(new_bullet) # Add the bullet to the scene
-	new_bullet.linear_velocity = shoot_vector # Add speed to the bullet
+	new_bullet.linear_velocity = shoot_vector # Add velocity to the bullet
 
 func give_closest_target() -> Node2D:
 	closest_target = null
@@ -93,10 +93,12 @@ func give_closest_target() -> Node2D:
 			if !targets[i].targeted && how_far_from_gun_turret_ground(closest_target.global_position) > how_far_from_gun_turret_ground(targets[i].global_position):
 				closest_target = targets[i]
 
-	# Make the closest target as "targeted" and return the closest target
-	closest_target.targeted = true
-	closest_target.retarget_timer.start()
-	return closest_target
+	if !closest_target.targeted: # If the selected target is not targeted
+		closest_target.targeted = true # Make it targeted
+		closest_target.retarget_timer.start() # Start its retarget timer
+		return closest_target # return the selected target
+	else:
+		return null
 
 # Calculate how far is the target from the gun turret ground
 func how_far_from_gun_turret_ground(target_global_position: Vector2) -> float:
