@@ -116,7 +116,7 @@ func give_closest_target() -> Node2D:
 
 		for i in range(1, len(targets)):
 			# Use this for "how_far_from_gun_turret_ground"
-			if !targets[i].targeted && how_far_from_gun_turret_ground(closest_target.global_position) < how_far_from_gun_turret_ground(targets[i].global_position):
+			if !targets[i].targeted && how_far_from_gun_turret_ground(closest_target.global_position) > how_far_from_gun_turret_ground(targets[i].global_position):
 				closest_target = targets[i]
 
 			# Use this for "how_far_from_gun"
@@ -131,7 +131,7 @@ func give_closest_target() -> Node2D:
 
 # Calculate how far is the target from the gun turret ground
 func how_far_from_gun_turret_ground(target_global_position: Vector2) -> float:
-	return target_global_position.y - global_position.y
+	return abs(target_global_position.y - global_position.y)
 
 # Calculate how far is the target from the gun
 func how_far_from_gun(target_global_position: Vector2) -> float:
