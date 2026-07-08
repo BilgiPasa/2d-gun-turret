@@ -85,6 +85,7 @@ func shoot_bullet_to(target: Node2D, physics_delta: float) -> void:
 				t = BULLET_MIN_REACH_TIME
 				shoot_vector.x = (target_relative_position.x / t) + target.linear_velocity.x
 
+		# There is no gravity calculation here because the bullet and the movable enemy have the same gravity
 		shoot_vector.y = (target_relative_position.y / t) + target.linear_velocity.y # Calculate Y speed
 	else:
 		t = abs(target_relative_position.x) / BULLET_DEFAULT_LIN_VEL_X # Calculate reach time based on default X speed
