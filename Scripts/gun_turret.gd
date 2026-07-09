@@ -15,7 +15,7 @@ var closest_target: Node2D
 var targets: Array[Node2D]
 
 # Gun Turret Label Variable
-var show_label: bool = true
+var show_label: bool = false
 
 # @onready Variables
 @onready var gun_sprite: Sprite2D = $GunSprite
