@@ -34,11 +34,15 @@ func resume() -> void:
 	pause_menu.hide()
 
 func open_settings() -> void:
+	pause_menu.process_mode = Node.PROCESS_MODE_DISABLED
 	settings_menu.process_mode = Node.PROCESS_MODE_INHERIT
 	settings_menu.show()
+	pause_menu.hide()
 
 func close_settings() -> void:
 	settings_menu.process_mode = Node.PROCESS_MODE_DISABLED
+	pause_menu.process_mode = Node.PROCESS_MODE_INHERIT
+	pause_menu.show()
 	settings_menu.hide()
 
 func _on_ground_area_body_entered(body: Node2D) -> void:
@@ -51,29 +55,29 @@ func _on_pause_menu_resume() -> void:
 func _on_pause_menu_open_settings() -> void:
 	open_settings()
 
-func _on_settings_menu_turn_on_mes() -> void:
+func _on_settings_menu_turn_on_mes() -> void: # mes = movable enemy spawner
 	movable_enemy_spawner.process_mode = Node.PROCESS_MODE_PAUSABLE
 	print("Movable enemy spawning enabled.")
 
-func _on_settings_menu_turn_off_mes() -> void:
+func _on_settings_menu_turn_off_mes() -> void: # mes = movable enemy spawner
 	movable_enemy_spawner.process_mode = Node.PROCESS_MODE_DISABLED
 	print("Movable enemy spawning disabled.")
 
-func _on_settings_menu_turn_on_gt() -> void:
+func _on_settings_menu_turn_on_gt() -> void: # gt = gun turret
 	gun_turret.process_mode = Node.PROCESS_MODE_PAUSABLE
 	gun_turret.show()
 	print("Gun turret enabled.")
 
-func _on_settings_menu_turn_off_gt() -> void:
+func _on_settings_menu_turn_off_gt() -> void: # gt = gun turret
 	gun_turret.process_mode = Node.PROCESS_MODE_DISABLED
 	gun_turret.hide()
 	print("Gun turret disabled.")
 
-func _on_settings_menu_turn_on_ses() -> void:
+func _on_settings_menu_turn_on_ses() -> void: # ses = static enemy spawner
 	static_enemy_spawner.process_mode = Node.PROCESS_MODE_PAUSABLE
 	print("Static enemy spawning enabled.")
 
-func _on_settings_menu_turn_off_ses() -> void:
+func _on_settings_menu_turn_off_ses() -> void: # ses = static enemy spawner
 	static_enemy_spawner.process_mode = Node.PROCESS_MODE_DISABLED
 	print("Static enemy spawning disabled.")
 

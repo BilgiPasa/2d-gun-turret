@@ -23,6 +23,19 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_124y6")
 
+[node name="SettingsLabel" type="Label" parent="Panel" unique_id=1704733833]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -232.5
+offset_top = 150.0
+offset_right = 232.5
+offset_bottom = 315.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 120
+text = "Settings"
+
 [node name="MESOnOffButton" type="Button" parent="Panel" unique_id=798842165]
 layout_mode = 1
 anchors_preset = 8
@@ -113,22 +126,6 @@ focus_next = NodePath("../MESOnOffButton")
 focus_previous = NodePath("../SESOnOffButton")
 theme_override_font_sizes/font_size = 60
 text = "Go Back"
-
-[node name="SettingsLabel" type="Label" parent="Panel" unique_id=1704733833]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -232.5
-offset_top = -382.5
-offset_right = 232.5
-offset_bottom = -217.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 120
-text = "Settings"
 
 [connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
 [connection signal="pressed" from="Panel/MESOnOffButton" to="." method="_on_mes_on_off_button_pressed"]

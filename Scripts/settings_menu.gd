@@ -8,13 +8,13 @@ signal turn_on_ses # Turn On Static Enemy Spawner
 signal turn_off_ses # Turn On Static Enemy Spawner
 signal go_back
 
-@onready var mes_on_off_button: Button = $Panel/MESOnOffButton
-@onready var gt_on_off_button: Button = $Panel/GTOnOffButton
-@onready var ses_on_off_button: Button = $Panel/SESOnOffButton
+@onready var mes_on_off_button: Button = $Panel/MESOnOffButton # Movable Enemy Spawner On Off Button
+@onready var gt_on_off_button: Button = $Panel/GTOnOffButton # Gun Turret On Off Button
+@onready var ses_on_off_button: Button = $Panel/SESOnOffButton # Static Enemy Spawner On Off Button
 @onready var go_back_button: Button = $Panel/GoBackButton
-var mes_on: bool = true
-var gt_on: bool = true
-var ses_on: bool = true
+var mes_on: bool = true # Movable Enemy Spawner On
+var gt_on: bool = true # Gun Turret On
+var ses_on: bool = true # Static Enemy Spawner On
 
 func _on_visibility_changed() -> void:
 	if visible:
@@ -31,6 +31,7 @@ func _on_mes_on_off_button_pressed() -> void:
 		turn_on_mes.emit()
 		mes_on_off_button.text = "Disable Movable\nEnemy Spawning"
 
+# On Gun Turret On Off Button Pressed
 func _on_gt_on_off_button_pressed() -> void:
 	if gt_on:
 		gt_on = false
