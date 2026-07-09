@@ -66,15 +66,15 @@ func shoot_bullet_to(target: Node2D, physics_delta: float) -> void:
 		shoot_vector.x = (target_relative_position.x / BULLET_REACH_TIME) + target.linear_velocity.x
 
 		# Calculate Y speed
-		# There is no gravity calculation here because the bullet and the movable enemy have the same gravity
+		# There is no gravity calculation here because the bullet and the movable enemy have the same gravity.
 		shoot_vector.y = (target_relative_position.y / BULLET_REACH_TIME) + target.linear_velocity.y
 	else:
 		# Calculate X speed
 		shoot_vector.x = target_relative_position.x / BULLET_REACH_TIME
 
 		# Calculate Y speed
-		# At the line below, I used (physics_delta * 4) to hit the target better because if I don't add it, it might miss the target by a small distance.
-		shoot_vector.y = (target_relative_position.y / BULLET_REACH_TIME) - (gravity_amount * (BULLET_REACH_TIME + (physics_delta * 4)) / 2)
+		# At the line below, I used (physics_delta * 5) to hit the target better because if I don't add it, it might miss the target by a small distance.
+		shoot_vector.y = (target_relative_position.y / BULLET_REACH_TIME) - (gravity_amount * (BULLET_REACH_TIME + (physics_delta * 5)) / 2)
 
 	gun_sprite.look_at(shoot_vector) # Make the gun sprite look at the target
 	new_bullet.position = gun_sprite.global_position # Initialize the position of the bullet
