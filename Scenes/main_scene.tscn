@@ -11,19 +11,20 @@
 size = Vector2(4750, 40)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r07tb"]
-size = Vector2(4750, 60)
+size = Vector2(4750, 50)
 
 [node name="MainScene" type="Node2D" unique_id=1697325332]
 script = ExtResource("1_52fb6")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=212988087]
-position = Vector2(0, -1260)
+position = Vector2(0, -1350)
 zoom = Vector2(0.4, 0.4)
 
 [node name="GunTurret" parent="." unique_id=1071740224 instance=ExtResource("2_6l7je")]
+position = Vector2(0, -96)
 
 [node name="Ground" type="StaticBody2D" parent="." unique_id=658723653]
-position = Vector2(0, 126)
+position = Vector2(0, 20)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ground" unique_id=669267698]
 shape = SubResource("RectangleShape2D_5s483")
@@ -36,7 +37,7 @@ collision_mask = 8
 shape = SubResource("RectangleShape2D_r07tb")
 
 [node name="MovableEnemySpawner" type="Node2D" parent="." unique_id=501403955]
-position = Vector2(0, -2750)
+position = Vector2(0, -3000)
 script = ExtResource("3_x6ack")
 
 [node name="SpawnTimer" type="Timer" parent="MovableEnemySpawner" unique_id=924858773]
@@ -55,6 +56,7 @@ visible = false
 [node name="SettingsMenu" parent="CanvasLayer" unique_id=1117894137 instance=ExtResource("6_6ev3c")]
 visible = false
 
+[connection signal="update_hit_lbl" from="GunTurret" to="." method="_on_gun_turret_update_hit_lbl"]
 [connection signal="body_entered" from="Ground/GroundArea" to="." method="_on_ground_area_body_entered"]
 [connection signal="timeout" from="MovableEnemySpawner/SpawnTimer" to="MovableEnemySpawner" method="_on_spawn_timer_timeout"]
 [connection signal="timeout" from="StaticEnemySpawner/SpawnTimer" to="StaticEnemySpawner" method="_on_spawn_timer_timeout"]
