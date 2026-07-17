@@ -20,20 +20,13 @@ var targets: Array[Node2D]
 @onready var can_shoot_timer: Timer = $CanShootTimer
 @onready var target_find_area: Area2D = $TargetFindArea
 @onready var mouse_position_node: Node2D = $MousePositionNode
-@onready var gun_turret_label: Label = $GunTurretLabel
 
-# Other Variables
+# Enemy Hit Gun Turret Count Variable
 var enemy_hit_gt_count: int = 0
-var show_label: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 	can_shoot_timer.wait_time = Globals.GT_CAN_SHOOT_TIMER_WAIT_TIME
-
-	if show_label:
-		gun_turret_label.show()
-	else:
-		gun_turret_label.hide()
 
 func _physics_process(delta: float) -> void:
 	attack_closest_target(delta)
